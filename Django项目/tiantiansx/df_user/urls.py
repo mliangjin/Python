@@ -10,7 +10,7 @@ urlpatterns = [
     # 登陆
     url(r'^login/', views.login),
     url(r'^login_dispose/', views.login_dispose),
-    # 登陆验证
-    url(r'^login_existCookie/', views.login_existCookie),
+    # 用户中心
+    url(r'info/', views.info)
 
 ]

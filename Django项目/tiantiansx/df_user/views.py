@@ -6,6 +6,7 @@ from .models import *
 # 注册
 def register(request):
     return render(request, 'df_user/register.html')
+# 注册数据到数据库
 def register_dispose(request):
     name = request.POST.get('user_name')
     pwd = request.POST.get('pwd')
@@ -25,8 +26,8 @@ def register_dispose(request):
     user.save()
     # 重定向到登陆页面
     return redirect('/user/login/')
-
-# 注册验证
+    
+# 注册用户名验证
 def register_exist(request):
     name = request.GET.get('name')
     count = UserInfo.objects.filter(name=name).count()
@@ -34,34 +35,47 @@ def register_exist(request):
 
 # 登陆
 def login(request):
-    return render(request, 'df_user/login.html')
+    name = request.COOKIES.get('name','')
+    print(name)
+    print('name')
+    context = {"name":name}
+    return render(request, 'df_user/login.html', context)
+# 登陆验证
 def login_dispose(request):
     name = request.POST.get('username')
     pwd = request.POST.get('pwd')
     checkbox = request.POST.get('checkbox',0)
-    
     # 数据里取出数据
     MysqlDate = UserInfo.objects.filter(name=name)
-    MysqlPwd = MysqlDate[0].pwd
-    MysqlName = MysqlDate[0].name
-    # django内置加密判断用户输入与数据里的密码是否一样
-    pwdValue =  check_password(pwd,MysqlPwd)
-    # 如果密码正确的逻辑判断
-    if pwdValue == True and name == MysqlName:
-        hrr = HttpResponseRedirect('/user/info/')
-        # 设置cookie
-        if checkbox == 1:
-            hrr.set_cookie('name',name)
+    # 数据库里有无数据防止拿数据的时候索引错误
+    if len(MysqlDate) == 1:
+        MysqlPwd = MysqlDate[0].pwd
+        MysqlName = MysqlDate[0].name
+        # django内置加密判断用户输入与数据里的密码是否一样
+        pwdValue =  check_password(pwd,MysqlPwd)
+        # 如果密码正确的逻辑判断
+        if pwdValue == True and name == MysqlName:
+            hrr = HttpResponseRedirect('/user/info/')
+            # 设置cookie
+            if checkbox != 0:
+                print('cookie 测试')
+                hrr.set_cookie('name',name)
+            else:
+                hrr.set_cookie('name','',max_age=-1)
+            # 设置session
+            request.session['name_id'] = MysqlDate[0].id
+            request.session['name'] = name
+            return hrr
         else:
-            hrr.set_cookie('name','',max_age=-1)
-        request.session['name_id'] = MysqlDate[0].id
-        request.session['name'] = name
-        return hrr
+            context = {'title': '用户登陆', 'error': '1', 'name':name}
+            return render(request, 'df_user/login.html', context)
+    else:
+        context = {'title': '用户登陆', 'error': '1', 'name':name}
+        return render(request, 'df_user/login.html', context)
+ 
+# 用户中心
+def info(request):
 
-    return 
+    return render(request, 'df_user/user_center_info.html')
 
-# 登陆验证
-def login_existCookie(request):
-    nameCookie = request.COOKIE.get('name','')
-    return JsonResponse({"nameCookie":nameCookie})
 
