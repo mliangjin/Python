@@ -49,4 +49,27 @@ python manage.py startapp df_user
         2.4.1 配置模版提交数据接收路径的url 和 视图方法
         url(r'^register_dispose/', views.register_dispose),
         def register_dispose(request):
+    2.5 解析数据方法
+        def register_dispose(request):
+        name = request.POST.get('user_name')
+        pwd = request.POST.get('pwd')
+        pwd2 = request.POST.get('cpwd')
+        email = request.POST.get('email')
+        # 再判断一次密码
+        if pwd != pwd2:
+            return redirect('/user/register/')    
+        
+        # 密码加密
+        pwd3 = make_password(pwd)
+        print(pwd3)
+
+        # 保存到数据库
+        user = models.UserInfo()
+        user.name = name
+        user.pwd = pwd3
+        user.email = email
+        user.save()
+        # 重定向到登陆页面
+        return redirect('/user/login/')
+    2.6 组册中ajax请求判断用户名是否存在
 

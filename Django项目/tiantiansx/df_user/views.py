@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from . import models
+from django.http import JsonResponse
+from .models import *
 
 def register(request):
     return render(request, 'df_user/register.html')
@@ -19,7 +20,7 @@ def register_dispose(request):
     print(pwd3)
 
     # 保存到数据库
-    user = models.UserInfo()
+    user = UserInfo()
     user.name = name
     user.pwd = pwd3
     user.email = email
@@ -29,4 +30,9 @@ def register_dispose(request):
 
 def login(request):
     return render(request, 'df_user/login.html')
+
+def register_exist(request):
+    name = request.GET.get('name')
+    count = UserInfo.object.filter(name=name).count()
+    return JsonResponse({"count":count})
 
