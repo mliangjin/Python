@@ -71,5 +71,10 @@ python manage.py startapp df_user
         user.save()
         # 重定向到登陆页面
         return redirect('/user/login/')
-    2.6 组册中ajax请求判断用户名是否存在
-
+    2.6 ajax 请求判断用户名是否存在
+        url(r'^register_exist/', views.register_exist)
+        def register_exist(request):
+            print('register_exist')
+            name = request.GET.get('name')
+            count = UserInfo.objects.filter(name=name).count()
+            return JsonResponse({"count":count})

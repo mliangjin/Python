@@ -32,7 +32,8 @@ def login(request):
     return render(request, 'df_user/login.html')
 
 def register_exist(request):
+    print('register_exist')
     name = request.GET.get('name')
-    count = UserInfo.object.filter(name=name).count()
+    count = UserInfo.objects.filter(name=name).count()
     return JsonResponse({"count":count})
 

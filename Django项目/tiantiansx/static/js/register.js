@@ -40,7 +40,6 @@ $(function(){
 
 	function check_user_name(){
 		var len = $('#user_name').val().length;
-		console.log('ajax1')
 		if(len<5||len>20)
 		{
 			$('#user_name').next().html('请输入5-20个字符的用户名')
@@ -49,9 +48,8 @@ $(function(){
 		}
 		else
 		{	
-			console.log('ajax2')
 			$.get('/user/register_exist/?name='+$('#user_name').val(), function(date){
-				if(date.count ==1){
+				if(date.count == 1){
 					$('#user_name').next().html('用户名已经存在').show();
 					error_name = true;
 				}else{
