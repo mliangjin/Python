@@ -35,6 +35,18 @@ python manage.py startapp df_user
         python manage.py makemigrations
         2.2.2 迁移模型类到数据库
         python manage.py migrate
-    
-        
+    2.3 配置模版
+        2.3.1 分析模版结构，给模版做拆分，继承块
+        {% extends "要继承的上一个html" %}
+        {% block "填写块的名字" %}{% endblock "填写块的名字" %}
+        2.3.2 给模版的连接配置正确的静态路径
+        在src中，加上/static/
+        2.3.3 配置模版的请求
+        <form action="user/register_dispose/" method="POST">
+        2.3.4 form 中填写 csrf
+        {% csrf_token %}
+    2.4 接收模版提交的数据
+        2.4.1 配置模版提交数据接收路径的url 和 视图方法
+        url(r'^register_dispose/', views.register_dispose),
+        def register_dispose(request):
 
