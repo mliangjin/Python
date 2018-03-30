@@ -16,6 +16,4 @@ urlpatterns = [
     url(r'order/', views.order),
     # 地址
     url(r'site/', views.site),
-    url(r'site_dispose/', views.site_dispose),
-
 ]

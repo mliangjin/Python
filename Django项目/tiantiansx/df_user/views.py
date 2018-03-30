@@ -36,8 +36,6 @@ def register_exist(request):
 # 登陆
 def login(request):
     name = request.COOKIES.get('name','')
-    print(name)
-    print('name')
     context = {"name":name}
     return render(request, 'df_user/login.html', context)
 # 登陆验证
@@ -58,7 +56,6 @@ def login_dispose(request):
             hrr = HttpResponseRedirect('/user/info/')
             # 设置cookie
             if checkbox != 0:
-                print('cookie 测试')
                 hrr.set_cookie('name',name)
             else:
                 hrr.set_cookie('name','',max_age=-1)
@@ -67,10 +64,10 @@ def login_dispose(request):
             request.session['name'] = name
             return hrr
         else:
-            context = {'title': '用户登陆', 'error': '1', 'name':name}
+            context = {'title': '用户登陆', 'error': '1',}
             return render(request, 'df_user/login.html', context)
     else:
-        context = {'title': '用户登陆', 'error': '1', 'name':name}
+        context = {'title': '用户登陆', 'error': '1',}
         return render(request, 'df_user/login.html', context)
  
 # 用户中心
@@ -91,7 +88,7 @@ def info(request):
         else:
             context = {
                 'name': MysqlDate[0].name,
-                'site': MysqlDate[0].show,
+                'site': MysqlDate[0].shou,
                 'phone': MysqlDate[0].phone,
             }
             # 返回给模版的数据
@@ -105,30 +102,47 @@ def order(request):
 
 # 地址
 def site(request):
-
-    return render(request, 'df_user/user_center_site.html')
-
-def site_dispose(request):
     # 获取到session对应的数据库数据
     MysqlDate = UserInfo.objects.filter(id=request.session.get('name_id'))
-    print(MysqlDate[0].id)
-    # 接收到POST请求的数据
-    shou = request.POST.get('shou')
-    detaddr = request.POST.get('detaddr')
-    youbian = request.POST.get('youbian')
-    phone = request.POST.get('phone')
-    # 给对应的数据库字段更新数据
-    MysqlDate.update(shou=shou)
-    MysqlDate.update(detaddr=detaddr)
-    MysqlDate.update(youbian=youbian)
-    MysqlDate.update(phone=phone)
-    # 返回context数据，便于显示给用户数据内容
-    context = {
-        'shou': shou,
-        'detaddr': detaddr,
-        'youbian': youbian,
-        'phone': phone,
-    }
-    return render(request, 'df_user/user_center_site.html', context)
+    # 两种情况:
+    # 1.POST       需要使用POST请求的数据更新页面数据
+    # 2.直接请求页面 需要在数据库中提取数据
+    if request.method == 'POST':
+        # 接收到POST请求的数据
+        shou = request.POST.get('shou')
+        detaddr = request.POST.get('detaddr')
+        youbian = request.POST.get('youbian')
+        phone = request.POST.get('phone')
+        # 给对应的数据库字段更新数据
+        MysqlDate.update(shou=shou)
+        MysqlDate.update(detaddr=detaddr)
+        MysqlDate.update(youbian=youbian)
+        MysqlDate.update(phone=phone)
+        # 返回context数据，便于显示给用户数据内容
+        context = {
+            'shou': shou,
+            'detaddr': detaddr,
+            'youbian': youbian,
+            'phone': phone,
+        }
+        return render(request, 'df_user/user_center_site.html', context)
+    else:
+        # 如果有数据
+        if len(MysqlDate) != 0:
+            # 在数据库中查找数据
+            shou = MysqlDate[0].shou
+            detaddr = MysqlDate[0].detaddr
+            youbian = MysqlDate[0].youbian  
+            phone = MysqlDate[0].phone
+            # 返回context数据，便于显示给用户数据内容
+            context = {
+                'shou': shou,
+                'detaddr': detaddr,
+                'youbian': youbian,
+                'phone': phone,
+            }
+            return render(request, 'df_user/user_center_site.html', context)
+        # 没有数据表示没有用户登陆
+        return render(request, 'df_user/user_center_site.html')
 
 

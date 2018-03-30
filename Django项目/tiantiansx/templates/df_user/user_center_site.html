@@ -24,12 +24,12 @@
 				<div class="site_con">
 					<dl>
 						<dt>当前地址：</dt>
-						<dd>北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 182****7528</dd>
+						<dd>{{ detaddr }} {{ shou }}收  联系电话:{{ phone }}</dd>
 					</dl>					
 				</div>
 				<h3 class="common_title2">编辑地址</h3>
 				<div class="site_con">
-					<form action="/user/site_dispose/" method="POST">
+					<form action="/user/site/" method="POST">
 						{% csrf_token %}
 						<div class="form_group">
 							<label>收件人：</label>
