@@ -33,19 +33,19 @@
 						{% csrf_token %}
 						<div class="form_group">
 							<label>收件人：</label>
-							<input type="text" name="shou">
+							<input type="text" name="shou" value="{{ shou }}">
 						</div>
 						<div class="form_group form_group2">
 							<label>详细地址：</label>
-							<textarea class="site_area" name="dataddr"></textarea>
+							<textarea class="site_area" name="detaddr">{{ detaddr }}</textarea>
 						</div>
 						<div class="form_group">
 							<label>邮编：</label>
-							<input type="text" name="youbian">
+							<input type="text" name="youbian" value="{{ youbian }}">
 						</div>
 						<div class="form_group">
 							<label>手机：</label>
-							<input type="text" name="phone">
+							<input type="text" name="phone" value="{{ phone }}" >
 						</div>
 						<input type="submit" name="" value="提交" class="info_submit">
 					</form>

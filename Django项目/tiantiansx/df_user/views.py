@@ -77,14 +77,16 @@ def login_dispose(request):
 def info(request):
     # 获取数据库数据
     MysqlDate = UserInfo.objects.filter(id=request.session.get('name_id'))
+    # 判断是否数据库存在数据
     if len(MysqlDate) != 0:
-        print(MysqlDate[0].shou)
+        # 检查数据库中的收货地址与电话是否存在
         if MysqlDate[0].shou == None and MysqlDate[0].phone == None:
             context = {
                 'name': MysqlDate[0].name,
                 'site': '请在收货地址填写地址',
                 'phone': '请在收获地址填写电话',
             }
+            # 返回给模版的数据
             return render(request, 'df_user/user_center_info.html', context)
         else:
             context = {
@@ -92,6 +94,7 @@ def info(request):
                 'site': MysqlDate[0].show,
                 'phone': MysqlDate[0].phone,
             }
+            # 返回给模版的数据
             return render(request, 'df_user/user_center_info.html', context)
     return render(request, 'df_user/user_center_info.html')
 
@@ -106,12 +109,26 @@ def site(request):
     return render(request, 'df_user/user_center_site.html')
 
 def site_dispose(request):
-    sID = request.session.get('name_id')
-    print(sID)
-    MysqlDate = UserInfo.objects.filter(id=sID)
+    # 获取到session对应的数据库数据
+    MysqlDate = UserInfo.objects.filter(id=request.session.get('name_id'))
     print(MysqlDate[0].id)
-    shou = request.
-
-    return render(request, 'df_user/user_center_site.html')
+    # 接收到POST请求的数据
+    shou = request.POST.get('shou')
+    detaddr = request.POST.get('detaddr')
+    youbian = request.POST.get('youbian')
+    phone = request.POST.get('phone')
+    # 给对应的数据库字段更新数据
+    MysqlDate.update(shou=shou)
+    MysqlDate.update(detaddr=detaddr)
+    MysqlDate.update(youbian=youbian)
+    MysqlDate.update(phone=phone)
+    # 返回context数据，便于显示给用户数据内容
+    context = {
+        'shou': shou,
+        'detaddr': detaddr,
+        'youbian': youbian,
+        'phone': phone,
+    }
+    return render(request, 'df_user/user_center_site.html', context)
 
 
