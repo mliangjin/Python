@@ -11,6 +11,11 @@ urlpatterns = [
     url(r'^login/', views.login),
     url(r'^login_dispose/', views.login_dispose),
     # 用户中心
-    url(r'info/', views.info)
+    url(r'info/', views.info),
+    # 订单
+    url(r'order/', views.order),
+    # 地址
+    url(r'site/', views.site),
+    url(r'site_dispose/', views.site_dispose),
 
 ]

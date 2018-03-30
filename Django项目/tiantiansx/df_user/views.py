@@ -75,7 +75,43 @@ def login_dispose(request):
  
 # 用户中心
 def info(request):
-
+    # 获取数据库数据
+    MysqlDate = UserInfo.objects.filter(id=request.session.get('name_id'))
+    if len(MysqlDate) != 0:
+        print(MysqlDate[0].shou)
+        if MysqlDate[0].shou == None and MysqlDate[0].phone == None:
+            context = {
+                'name': MysqlDate[0].name,
+                'site': '请在收货地址填写地址',
+                'phone': '请在收获地址填写电话',
+            }
+            return render(request, 'df_user/user_center_info.html', context)
+        else:
+            context = {
+                'name': MysqlDate[0].name,
+                'site': MysqlDate[0].show,
+                'phone': MysqlDate[0].phone,
+            }
+            return render(request, 'df_user/user_center_info.html', context)
     return render(request, 'df_user/user_center_info.html')
+
+# 订单
+def order(request):
+
+    return render(request, 'df_user/user_center_order.html')
+
+# 地址
+def site(request):
+
+    return render(request, 'df_user/user_center_site.html')
+
+def site_dispose(request):
+    sID = request.session.get('name_id')
+    print(sID)
+    MysqlDate = UserInfo.objects.filter(id=sID)
+    print(MysqlDate[0].id)
+    shou = request.
+
+    return render(request, 'df_user/user_center_site.html')
 
 
