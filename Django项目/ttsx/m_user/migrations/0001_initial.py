@@ -17,10 +17,10 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=20)),
                 ('pwd', models.CharField(max_length=128)),
                 ('email', models.CharField(max_length=30)),
-                ('phone', models.IntegerField(max_length=11, null=True)),
+                ('phone', models.CharField(max_length=11, null=True)),
                 ('shouName', models.CharField(max_length=20, null=True)),
                 ('detadd', models.CharField(max_length=100, null=True)),
-                ('youbian', models.ImageField(max_length=6, null=True, upload_to='')),
+                ('youbian', models.CharField(max_length=6, null=True)),
             ],
         ),
     ]
