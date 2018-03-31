@@ -1,5 +1,4 @@
 from django.db import models
-from tinymce.models import HTMLField
 
 class TypeInfo(models.Model):
     name = models.CharField(max_length=20)                      # 种类名字
@@ -15,5 +14,4 @@ class GoodsInfo(models.Model):
     isDelete = models.BooleanField(default=False)               # 逻辑删除
     intor = models.CharField(max_length=200)                    # 简介
     kuchun = models.IntegerField()                              # 库存
-    deteil = HTMLField()                                        # 详情
 
