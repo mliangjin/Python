@@ -4,6 +4,8 @@ from tinymce.models import HTMLField
 class TypeInfo(models.Model):
     name = models.CharField(max_length=20)                      # 种类名字
     isDelete = models.BooleanField(default=False)               # 逻辑删除
+    def __str__(self):
+        return self.name
 
 class GoodsInfo(models.Model):
     name = models.CharField(max_length=20)                      # 商品名字
@@ -16,3 +18,5 @@ class GoodsInfo(models.Model):
     intor = models.CharField(max_length=200)                    # 简介
     kuchun = models.IntegerField()                              # 库存
     details = HTMLField()                                       # 详情
+    def __str__(self):
+        return self.name

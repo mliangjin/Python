@@ -1,4 +1,13 @@
-{% extends "m_user/base_foot.html" %}
+{% extends "base_foot.html" %}
+{% block headJS %}
+	<script>
+		$(function(){
+			if({{ name }} != null){
+				$('#password').next().html('用户名或密码错误').show()
+			}
+		})
+	</script>
+{% endblock headJS %}
 {% block body %}
 	<div class="login_top clearfix">
 		<a href="index.html" class="login_logo"><img src="/static/images/logo02.png"></a>	
@@ -14,13 +23,13 @@
 					<a href="#">立即注册</a>
 				</div>
 				<div class="form_input">
-					<form>
-						<input type="text" name="username" class="name_input" placeholder="请输入用户名">
-						<div class="user_error">输入错误</div>
-						<input type="password" name="pwd" class="pass_input" placeholder="请输入密码">
+					<form action="/user/login/" method="POST">
+						{% csrf_token %}
+						<input type="text" name="username" class="name_input" placeholder="请输入用户名" value="{{ name }}">
+						<input type="password" name="pwd" class="pass_input" placeholder="请输入密码" id="password">
 						<div class="pwd_error">输入错误</div>
 						<div class="more_input clearfix">
-							<input type="checkbox" name="">
+							<input type="checkbox" name="remember" checked="checked" value="1">
 							<label>记住用户名</label>
 							<a href="#">忘记密码</a>
 						</div>
