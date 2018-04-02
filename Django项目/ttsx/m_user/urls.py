@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^order/', views.order),
     # 地址
     url(r'^site/', views.site),
+    # 退出
+    url(r'^logout/', views.logout),
 ]

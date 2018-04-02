@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import *
+from django.core.paginator import Paginator
 
 # 首页
 def index(request):
@@ -28,9 +29,50 @@ def index(request):
     return render(request, 'm_goods/index.html', context)
 
 # 商品列表
-def lists(request):
-    return render(request, 'm_goods/list.html')
+# 接收 类型id 排序页面1.2.3 分页
+def lists(request, tid, orders, pagIndex):
+    # 根据排序的值判断 默认 价格 人气 要取的数据
+    # 默认 数据排序
+    if orders == '1': 
+        goods = GoodsInfo.objects.filter(typeinfo_id=tid).order_by('id')
+    # 价格 数据排序
+    elif orders == '2':
+        goods = GoodsInfo.objects.filter(typeinfo_id=tid).order_by('-price')
+    # 人气 数据排序
+    elif orders == '3':
+        goods = GoodsInfo.objects.filter(typeinfo_id=tid).order_by('-click')
+    # 推荐的两条商品
+    goodsDouble = GoodsInfo.objects.filter(typeinfo_id=tid).order_by('id')[:2]
+    # 构造分页需要用的数据,遍历数据库,每页10条
+    paginator = Paginator(goods, 10)
+    # 构造每一页的数据
+    goodsList = paginator.page(int(pagIndex))
+    # 构造的迭代对象,是一个分页的个数数据
+    pagIndexList = paginator.page_range
+    # 构造返回上下文
+    context = {
+        # 两条推荐商品
+        'goodsDouble': goodsDouble,
+        # 当前页面的类型
+        'tid': tid,
+        # 排序页面 1,2,3
+        'order': orders,
+        # 传入的分页第几页
+        'pagIndex': int(pagIndex),
+        # 构造的迭代对象,是一个分页的个数数据
+        'pagIndexList': pagIndexList,
+        # 每页分页数据
+        'goodsList': goodsList,
+    }
+    return render(request, 'm_goods/list.html', context)
+    
 
 # 详情
-def detail(request):
-    return render(request, 'm_goods/detail.html')
+def detail(request, id):
+    id = GoodsInfo.objects.filter(id=id)
+    goodsDouble = GoodsInfo.objects.all().order_by('-id')[:2]
+    context = {
+        "id":id[0],
+        "goodsDouble": goodsDouble
+    }
+    return render(request, 'm_goods/detail.html', context)

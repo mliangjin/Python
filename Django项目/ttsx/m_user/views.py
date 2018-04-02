@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
 from .models import *
 from django.http import JsonResponse, HttpResponseRedirect
+from .user_verify import *
 
 
 # 注册
@@ -65,6 +66,7 @@ def login(request):
     return render(request, 'm_user/login.html')
 
 # 信息
+@user_verify_login
 def info(request):
     # 获取session对应的数据库字段
     user = UserInfo.objects.filter(id=request.session.get('user_id',''))
@@ -90,10 +92,12 @@ def info(request):
     return render(request, 'm_user/user_center_info.html')
 
 # 订单
+@user_verify_login
 def order(request):
     return render(request, 'm_user/user_center_order.html')
 
 # 地址
+@user_verify_login
 def site(request):
     # 获取更新字段 
     user = user = UserInfo.objects.filter(id=request.session.get('user_id',''))
@@ -132,3 +136,8 @@ def site(request):
             return render(request, 'm_user/user_center_site.html', context)
     # 意外的其他请求
     return render(request, 'm_user/user_center_site.html')
+
+    # 退出
+def logout(request):
+    request.session.flush()
+    return redirect('/goods/index/')
