@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import *
 from django.core.paginator import Paginator
 
+
 # 首页
 def index(request):
     # 获取 正序的四个id数据 与 降序的四个order数据
@@ -49,6 +50,8 @@ def lists(request, tid, orders, pagIndex):
     goodsList = paginator.page(int(pagIndex))
     # 构造的迭代对象,是一个分页的个数数据
     pagIndexList = paginator.page_range
+    # session用户的收藏的商品个数
+
     # 构造返回上下文
     context = {
         # 两条推荐商品

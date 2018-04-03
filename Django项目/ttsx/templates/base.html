@@ -7,7 +7,7 @@
             <div class="welcome fl">欢迎来到天天生鲜!</div>
             <div class="fr">
                 {% if request.session.user_name|default:'' != '' %}
-                     <div class="login_btn fl">
+                     <div class="login_btn fl" sess="{{ request.session.user_name }}">
                         欢迎您：<em>{{request.session.user_name}}</em>
                         <span>|</span>
                         <a href="/user/logout/">退出</a>
