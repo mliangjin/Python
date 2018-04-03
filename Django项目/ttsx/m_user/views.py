@@ -109,6 +109,7 @@ def site(request):
             detadd = request.POST.get('detadd')
             youbian = request.POST.get('youbian')
             phone = request.POST.get('phone')
+            # 更新表单数据
             user.update(shouName=shouName)
             user.update(detadd=detadd)
             user.update(youbian=youbian)
